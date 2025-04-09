@@ -1,0 +1,12 @@
+-- 식당ID, 식당이름, 음식종류, 즐겨찾기수, 주소, 리뷰평균점수(세번째자리반올림)
+-- 식당ID, 식당이름, 음식종류, 즐겨찾기수, 주소
+-- 점수, 식당ID
+-- 평균점수 기준 내림차순/ 즐겨찾기수 기준 내림차순
+
+SELECT DISTINCT I.REST_ID, I.REST_NAME, I.FOOD_TYPE, I.FAVORITES, I.ADDRESS, 
+ROUND(AVG(R.REVIEW_SCORE), 2) AS SCORE
+FROM REST_REVIEW R
+JOIN REST_INFO I ON I.REST_ID = R.REST_ID
+WHERE LEFT(I.ADDRESS, 2) = '서울'
+GROUP BY I.REST_ID
+ORDER BY SCORE DESC, FAVORITES DESC
