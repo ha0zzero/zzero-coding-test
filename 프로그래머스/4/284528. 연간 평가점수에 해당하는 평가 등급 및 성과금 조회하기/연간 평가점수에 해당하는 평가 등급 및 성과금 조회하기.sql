@@ -1,0 +1,25 @@
+-- 사번, 성명, 평가 등급, 성과금을 조회
+-- 평가등급의 컬럼명은 GRADE로, 성과금의 컬럼명은 BONUS
+-- 결과는 사번 기준으로 오름차순 정렬
+
+-- HR_EMPLOYEES (사번, 성명, 연봉)
+-- HR_GRADE (사번, 점수)
+-- 점수+연봉 => 성과급
+
+SELECT E.EMP_NO, E.EMP_NAME, S.GRADE,
+CASE WHEN S.GRADE = 'S' THEN E.SAL * 0.2
+WHEN S.GRADE = 'A' THEN E.SAL * 0.15
+WHEN S.GRADE = 'B' THEN E.SAL * 0.1
+ELSE E.SAL * 0 END AS BONUS
+FROM HR_EMPLOYEES E
+LEFT JOIN (
+SELECT EMP_NO, 
+CASE WHEN SUM(SCORE)/2 >= 96 THEN 'S'
+WHEN SUM(SCORE)/2 >= 90 THEN 'A'
+WHEN SUM(SCORE)/2 >= 80 THEN 'B'
+ELSE 'C' END AS GRADE
+FROM HR_GRADE
+GROUP BY EMP_NO
+) AS S
+ON E.EMP_NO = S.EMP_NO
+ORDER BY 1 ASC;
